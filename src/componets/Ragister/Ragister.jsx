@@ -1,11 +1,12 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import auth from '../firebase/firebase.config';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Ragister = () => {
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
-
+    const [showPassword, setShowPassword] = useState(false);
     const heandelRegistar = e => {
         e.preventDefault();
         console.log('from sbmiting');
@@ -13,15 +14,19 @@ const Ragister = () => {
         const password = e.target.password.value
         console.log(password, email);
 
-          // reset error
+        // reset error
 
-          setRegisterError('')
-          setSuccess('')
+        setRegisterError('')
+        setSuccess('')
 
         // password error
 
         if (password.length < 6) {
             setRegisterError(' Password should be at least 6 characters');
+            return;
+        }
+        else if (!/[A-Z]/.test(password)) {
+            setRegisterError('Your password should have at least on upper case characters');
             return;
         }
 
@@ -51,7 +56,22 @@ const Ragister = () => {
                 <form onSubmit={heandelRegistar}>
                     <input className='w-3/4 mb-4 py-2 px-4 border-2 outline-none border-black border-double' placeholder='Email Address' type="email" name="email" id="" required />
                     <br />
-                    <input className='w-3/4 mb-4 py-2 px-4 border-2 outline-none border-black border-double' placeholder='Password' type="password" name="password" id="" required />
+                    <div className="relative w-3/4">
+                        <input
+                            className="w-full mb-4 py-2 px-4 pr-10 border-2 outline-none border-black border-double"
+                            placeholder="Password"
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            required
+                        />
+                        <span
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-5 top-1/3 transform -translate-y-1/3 cursor-pointer text-gray-600"
+                        >
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                    </div>
+
                     <br />
                     <input className='btn btn-secondary w-3/4' type="submit" value="Register" />
                 </form>
