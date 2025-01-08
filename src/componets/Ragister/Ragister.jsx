@@ -1,4 +1,6 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React from 'react';
+import auth from '../firebase/firebase.config';
 
 const Ragister = () => {
     const heandelRegistar = e => {
@@ -8,7 +10,17 @@ const Ragister = () => {
         const password = e.target.password.value
         console.log(password, email);
 
+        //create new user
 
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(result =>{
+                console.log(result.user);
+                
+            })
+            .catch(error => {
+                console.error(error);
+
+            })
     }
     return (
         <div>
