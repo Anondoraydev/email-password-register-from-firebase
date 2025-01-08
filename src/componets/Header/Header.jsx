@@ -7,6 +7,7 @@ const Header = () => {
      <li><NavLink to={'/'}>Home</NavLink></li>
      <li><NavLink to={'/login'}>Login</NavLink></li>
      <li><NavLink to={'/ragister'}>Register</NavLink></li>
+     <li><NavLink to={'/ragisterHero'}>Hero Register</NavLink></li>
   </>
   return (
     <div className="navbar bg-base-100">
@@ -35,7 +36,7 @@ const Header = () => {
             {navlikes}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Emaul Auth</a>
+        <a className="btn btn-ghost text-xl">Email Auth</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">

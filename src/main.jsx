@@ -7,6 +7,7 @@ import Home from "./componets/Home/Home";
 import Root from "./componets/Root/Root"; 
 import Login from "./componets/Login/Login";
 import Ragister from "./componets/Ragister/Ragister";
+import HeroRegister from "./componets/HeroRegister/HeroRegister";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path:'/ragister',
         element:<Ragister/>
+      },
+      {
+        path:'/ragisterHero',
+        element:<HeroRegister/>
       }
     ],
   },
