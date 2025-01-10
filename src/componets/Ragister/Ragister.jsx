@@ -70,7 +70,7 @@ const Register = () => {
                         />
                         <span
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-5 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+                            className="absolute right-5 top-1/3 transform -translate-y-1/3 cursor-pointer text-gray-600"
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>

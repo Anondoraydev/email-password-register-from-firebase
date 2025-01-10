@@ -1,16 +1,18 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase/firebase.config";
-import { useState } from "react";
-import { Link } from "react-router";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const [registerError, setRegisterError] = useState('');
     const [success, setSuccess] = useState('');
+    const emailRef = useRef(null);
 
+    // Handle login
     const handleLogin = (e) => {
         e.preventDefault();
-        
-        // Get email and password correctly
+
+        // Get email and password
         const email = e.target.email.value;
         const password = e.target.password.value;
 
@@ -28,8 +30,32 @@ const Login = () => {
             })
             .catch((error) => {
                 console.error(error);
-                setRegisterError(error.message);
+                setRegisterError("Plaese Ragister");
             });
+    };
+
+    // Handle forget password
+    const handleForgetPassword = () => {
+        const email = emailRef.current.value;
+        if (!email) {
+            console.log('Please provide an email');
+            return;
+        }
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            console.log('Please provide a valid email address');
+            return;
+        }
+
+        // send validate email
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert('please chack your email')
+            })
+            .catch(error => {
+                console.log(error);
+
+            })
     };
 
     return (
@@ -49,27 +75,30 @@ const Login = () => {
                                 <label className="label">
                                     <span className="label-text">Email</span>
                                 </label>
-                                <input 
-                                    type="email" 
-                                    name="email" 
-                                    placeholder="email" 
-                                    className="input input-bordered" 
-                                    required 
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="email"
+                                    ref={emailRef}
+                                    className="input input-bordered"
+                                    required
                                 />
                             </div>
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Password</span>
                                 </label>
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    placeholder="password" 
-                                    className="input input-bordered" 
-                                    required 
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="password"
+                                    className="input input-bordered"
+                                    required
                                 />
                                 <label className="label">
-                                    <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                                    <a href="#" onClick={handleForgetPassword} className="label-text-alt link link-hover">
+                                        Forgot password?
+                                    </a>
                                 </label>
                             </div>
                             <div className="form-control mt-6">
@@ -78,9 +107,17 @@ const Login = () => {
                                 </button>
                             </div>
                         </form>
-                        {registerError && <p className="text-red-400 mt-4">{registerError}</p>}
-                        {success && <p className="text-green-500 mt-4">{success}</p>}
-                        <p className="m-5"><a href="">New to this website? Please <Link to={'/ragister'} className="text-green-500">Ragister</Link></a></p>
+                        <div className="pl-5">
+                            {registerError && <p className="text-red-400 mt-4">{registerError}</p>}
+                            {success && <p className="text-green-500 mt-4">{success}</p>}
+
+                        </div>
+                        <p className="m-5">
+                            New to this website? Please{' '}
+                            <Link to={'/Ragister'} className="text-green-500">
+                                Register
+                            </Link>
+                        </p>
                     </div>
                 </div>
             </div>
