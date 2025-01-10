@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import React, { useState } from 'react';
 import auth from '../firebase/firebase.config';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -12,10 +12,11 @@ const Register = () => {
     const handleRegister = (e) => {
         e.preventDefault();
         console.log('Form submitting...');
+        const name = e.target.name.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
         const accepted = e.target.terms.checked;
-        console.log({ email, password, accepted });
+        console.log({ name, email, password, accepted });
 
         // Reset messages
         setRegisterError('');
@@ -39,7 +40,30 @@ const Register = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((result) => {
                 console.log(result.user);
-                setSuccess('User created successfully!');
+
+                if (result.user.emailVerified) {
+                    setSuccess('User created successfully!');
+
+                }
+                else {
+                    alert('please verifyed your email address.')
+                }
+
+                //update profile
+
+                updateProfile(result.user, {
+                    displayName: name,
+                    photoURL: "https://example.com/jane-q-user/profile.jpg"
+                })
+                .then(()=>console.log('profile update'))
+                .catch()
+
+                // send verificatuon emaill
+                sendEmailVerification(result.user)
+                    .then(() => {
+                        alert('please check your email and verify your account');
+
+                    })
             })
             .catch((error) => {
                 console.error(error);
@@ -48,10 +72,18 @@ const Register = () => {
     };
 
     return (
-        <div> 
+        <div>
             <div className="m-auto w-1/2">
                 <h2 className="text-3xl font-bold mb-4">Please Register</h2>
                 <form onSubmit={handleRegister}>
+                    <input
+                        className="w-3/4 mb-4 py-2 px-4 border-2 outline-none border-black border-double"
+                        placeholder="Your name"
+                        type="text"
+                        name="name"
+                        required
+                    />
+                    <br />
                     <input
                         className="w-3/4 mb-4 py-2 px-4 border-2 outline-none border-black border-double"
                         placeholder="Email Address"
